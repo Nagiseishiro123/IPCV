@@ -12,7 +12,12 @@ def gray_to_color(gray_image_path, r_channel_path, g_channel_path, b_channel_pat
     b_channel = cv2.imread(b_channel_path, cv2.IMREAD_GRAYSCALE)
 
     # Combine the color channels to create a color image
-    color_image = cv2.merge((b_channel, g_channel, r_channel))
+    # color_image = cv2.merge((b_channel, g_channel, r_channel))
+    height, width = r_channel.shape
+    color_image = np.zeros((height, width, 3), dtype=np.uint8)
+    color_image[:, :, 0] = b_channel
+    color_image[:, :, 1] = g_channel
+    color_image[:, :, 2] = r_channel
 
     return color_image
 
@@ -28,11 +33,9 @@ def save_color_channels(image_path):
     r_channel = color_image[:, :, 2]
 
     # Save the color channels as separate image files
-    cv2.imwrite('r_channel.jpg', r_channel)
-    cv2.imwrite('g_channel.jpg', g_channel)
-    cv2.imwrite('b_channel.jpg', b_channel)
-
-    print("Saved color channels R, G, B.")
+    cv2.imwrite('gray_images/r_channel.jpg', r_channel)
+    cv2.imwrite('gray_images/g_channel.jpg', g_channel)
+    cv2.imwrite('gray_images/b_channel.jpg', b_channel)
 
 # Main program
 if __name__ == "__main__":
@@ -40,10 +43,10 @@ if __name__ == "__main__":
     save_color_channels('pic.jpg')
 
     # Convert the grayscale image to a color image
-    color_image = gray_to_color('gray_image.jpg', 'r_channel.jpg', 'g_channel.jpg', 'b_channel.jpg')
+    color_image = gray_to_color('gray_image.jpg', 'gray_images/r_channel.jpg', 'gray_images/g_channel.jpg', 'gray_images/b_channel.jpg')
 
     # Display and save the color image from the grayscale image
     cv2.imshow('Color Image from Gray', color_image)
-    cv2.imwrite('color_image_from_gray.jpg', color_image)
+    cv2.imwrite('color_images/color_image_from_gray.jpg', color_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
